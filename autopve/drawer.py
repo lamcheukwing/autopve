@@ -219,7 +219,7 @@ class Drawer(object):
                     del storage.answers[name]
                     for row in self._answers_table.rows:
                         if name == row["name"]:
-                            self._answers_table.remove_rows(row)
+                            self._answers_table.remove_row(row)
             else:
                 storage.answer(answer)
             self._add_answer_to_table(answer)
@@ -264,7 +264,7 @@ class Drawer(object):
                     storage.rm_playbook(name)
                     for row in self._playbooks_table.rows:
                         if name == row["name"]:
-                            self._playbooks_table.remove_rows(row)
+                            self._playbooks_table.remove_row(row)
             else:
                 storage.mk_playbook(playbook)
             self._add_playbook_to_table(playbook)
@@ -350,7 +350,7 @@ class Drawer(object):
             elif self._selection_mode == "remove":
                 if answer in storage.answers:
                     del storage.answers[answer]
-                self._answers_table.remove_rows(e.selection[0])
+                self._answers_table.remove_row(e.selection[0])
 
     async def _selected_playbook(self, e):
         self._hide_content()
