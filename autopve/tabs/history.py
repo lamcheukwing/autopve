@@ -150,8 +150,12 @@ class Answer(Tab):
                     el.SmButton(text="Refresh", on_click=lambda _: self.update())
             self.grid = ui.aggrid(
                 {
-                    "suppressRowClickSelection": True,
-                    "rowSelection": "multiple",
+                    "rowSelection": {
+                        "mode": "singleRow",
+                        "enableClickSelection": False,
+                        "enableSelectionWithoutKeys": False,
+                        "checkboxes": False,
+                    },
                     "paginationAutoPageSize": True,
                     "pagination": True,
                     "defaultColDef": {
@@ -159,6 +163,12 @@ class Answer(Tab):
                         "sortable": True,
                         "suppressMovable": True,
                         "sortingOrder": ["asc", "desc"],
+                    },
+                    "selectionColumnDef": {
+                        "sortable": False,
+                        "resizable": False,
+                        "maxWidth": 32,
+                        "suppressHeaderMenuButton": True,
                     },
                     "columnDefs": [
                         {
@@ -176,7 +186,6 @@ class Answer(Tab):
                             "headerName": "Name",
                             "field": "name",
                             "filter": "agTextColumnFilter",
-                            "flex": 1,
                         },
                         {
                             "headerName": "Answer",
@@ -185,32 +194,37 @@ class Answer(Tab):
                             "maxWidth": 200,
                         },
                     ],
-                    "rowData": self._share.answer_history,
+                    "rowData": [],
                 },
-                theme="balham-dark",
+                theme="balham",
             )
             self.grid.tailwind().width("full").height("5/6")
             self.grid.on("cellClicked", lambda e: display_request(e))
             register_history(self)
 
     def _set_selection(self, mode=None):
-        row_selection = "single"
-        self.grid.options["columnDefs"][0]["headerCheckboxSelection"] = False
-        self.grid.options["columnDefs"][0]["headerCheckboxSelectionFilteredOnly"] = True
-        self.grid.options["columnDefs"][0]["checkboxSelection"] = False
-        if mode is None:
+        row_selection = {
+            "mode": "singleRow",
+            "enableClickSelection": False,
+            "enableSelectionWithoutKeys": False,
+            "checkboxes": False,
+        }
+        if mode == "single":
+            row_selection["enableClickSelection"] = True
+            row_selection["enableSelectionWithoutKeys"] = True
+            row_selection["checkboxes"] = True
             pass
-        elif mode == "single":
-            self.grid.options["columnDefs"][0]["checkboxSelection"] = True
         elif mode == "multiple":
-            row_selection = "multiple"
-            self.grid.options["columnDefs"][0]["headerCheckboxSelection"] = True
-            self.grid.options["columnDefs"][0]["checkboxSelection"] = True
+            row_selection["mode"] = "multiRow"
+            row_selection["enableClickSelection"] = True
+            row_selection["enableSelectionWithoutKeys"] = True
+            row_selection["checkboxes"] = True
         self.grid.options["rowSelection"] = row_selection
         self.grid.update()
 
     def update(self):
         if self.grid.is_deleted is False:
+            self.grid.options["rowData"] = self._share.answer_history
             self.grid.update()
         else:
             raise Exception("Grid is not available for update")
@@ -241,7 +255,7 @@ class Answer(Tab):
             rows = await self.grid.get_selected_rows()
             for row in rows:
                 self._share.answer_history.remove(row)
-            self.grid.update()
+            self.update()
         self._set_selection()
 
 
@@ -249,7 +263,7 @@ class Playbook(Tab):
     def _build(self):
         async def display_request(e):
             cli_instance = None
-            if e.args["data"]["system_info"] is not None:
+            if e.args["data"]["system_info"] is not None and self.grid.options["rowSelection"]["checkboxes"] is False:
                 with ui.dialog() as dialog, el.Card():
                     with el.DBody(height="[90vh]", width="[90vw]"):
                         with el.WColumn():
@@ -289,8 +303,12 @@ class Playbook(Tab):
                     el.SmButton(text="Refresh", on_click=lambda _: self.update())
             self.grid = ui.aggrid(
                 {
-                    "suppressRowClickSelection": True,
-                    "rowSelection": "multiple",
+                    "rowSelection": {
+                        "mode": "singleRow",
+                        "enableClickSelection": False,
+                        "enableSelectionWithoutKeys": False,
+                        "checkboxes": False,
+                    },
                     "paginationAutoPageSize": True,
                     "pagination": True,
                     "defaultColDef": {
@@ -298,6 +316,12 @@ class Playbook(Tab):
                         "sortable": True,
                         "suppressMovable": True,
                         "sortingOrder": ["asc", "desc"],
+                    },
+                    "selectionColumnDef": {
+                        "sortable": False,
+                        "resizable": False,
+                        "maxWidth": 32,
+                        "suppressHeaderMenuButton": True,
                     },
                     "columnDefs": [
                         {
@@ -315,7 +339,6 @@ class Playbook(Tab):
                             "headerName": "Name",
                             "field": "name",
                             "filter": "agTextColumnFilter",
-                            "flex": 1,
                         },
                         {
                             "headerName": "Playbook",
@@ -326,25 +349,29 @@ class Playbook(Tab):
                     ],
                     "rowData": [],
                 },
-                theme="balham-dark",
+                theme="balham",
             )
             self.grid.tailwind().width("full").height("5/6")
             self.grid.on("cellClicked", lambda e: display_request(e))
             register_history(self)
 
     def _set_selection(self, mode=None):
-        row_selection = "single"
-        self.grid.options["columnDefs"][0]["headerCheckboxSelection"] = False
-        self.grid.options["columnDefs"][0]["headerCheckboxSelectionFilteredOnly"] = True
-        self.grid.options["columnDefs"][0]["checkboxSelection"] = False
-        if mode is None:
+        row_selection = {
+            "mode": "singleRow",
+            "enableClickSelection": False,
+            "enableSelectionWithoutKeys": False,
+            "checkboxes": False,
+        }
+        if mode == "single":
+            row_selection["enableClickSelection"] = True
+            row_selection["enableSelectionWithoutKeys"] = True
+            row_selection["checkboxes"] = True
             pass
-        elif mode == "single":
-            self.grid.options["columnDefs"][0]["checkboxSelection"] = True
         elif mode == "multiple":
-            row_selection = "multiple"
-            self.grid.options["columnDefs"][0]["headerCheckboxSelection"] = True
-            self.grid.options["columnDefs"][0]["checkboxSelection"] = True
+            row_selection["mode"] = "multiRow"
+            row_selection["enableClickSelection"] = True
+            row_selection["enableSelectionWithoutKeys"] = True
+            row_selection["checkboxes"] = True
         self.grid.options["rowSelection"] = row_selection
         self.grid.update()
 
