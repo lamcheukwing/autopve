@@ -31,7 +31,7 @@ class Content:
         self._automation = None
         self._history = None
         self._header = ui.header(bordered=True).classes("bg-dark q-pt-sm q-pb-xs")
-        self._header.tailwind.border_color(f"[{el.orange}]").min_width("[920px]")
+        self._header.classes(f"border-[{el.orange}] min-w-[920px]")
         self._header.visible = False
         self._content = el.WColumn().classes("pl-[10px]")
         self._content.bind_visibility_from(self._header)
@@ -187,7 +187,7 @@ class Content:
                                         terminal = el.Terminal(options={"rows": 20, "cols": 80, "convertEol": True})
                                         c.register_terminal(terminal, prefix=True)
                                         with el.WRow() as row:
-                                            row.tailwind.height("[40px]")
+                                            row.classes("h-[40px]")
                                             ui.spinner(type="dots", size="32px").bind_visibility_from(c, "is_busy", value=True)
                                             el.DButton("Cancel", on_click=lambda: c.terminate()).bind_visibility_from(c, "is_busy", value=True)
                                             ui.spinner(type="dots", size="32px").bind_visibility_from(c, "is_busy", value=True)

@@ -75,7 +75,7 @@ class SelectionConfirm:
         self._request = None
         self._submitted: Optional[asyncio.Event] = None
         with self._container:
-            self._label = ui.label(self._label).tailwind().text_color("primary")
+            self._label = ui.label(self._label).classes("text-primary")
             self._done = el.IButton(icon="done", on_click=lambda: self.submit("confirm"))
             self._cancel = el.IButton(icon="close", on_click=lambda: self.submit("cancel"))
 
@@ -109,7 +109,7 @@ class SelectionConfirm:
 class Answer(Tab):
     def _build(self):
         async def display_request(e):
-            if e.args["data"]["system_info"] is not None and e.args["data"]["response"] is not None:
+            if e.args["data"]["system_info"] is not None and e.args["data"]["response"] is not None and self.grid.options["rowSelection"]["checkboxes"] is False:
                 with ui.dialog() as dialog, el.Card():
                     with el.DBody(height="[90vh]", width="[90vw]"):
                         with el.WColumn():
@@ -135,19 +135,18 @@ class Answer(Tab):
                                     ui.code(response).classes("w-[70vw] h-[70vh]")
 
                         with el.WRow() as row:
-                            row.tailwind.height("[40px]")
+                            row.classes("h-[40px]")
                             el.DButton("Exit", on_click=lambda: dialog.submit("exit"))
                 await dialog
 
         with el.WColumn() as col:
-            col.tailwind.height("full")
+            col.classes("h-full")
             self._confirm = el.WRow()
             self._confirm.visible = False
-            with el.WRow().classes("justify-between").bind_visibility_from(self._confirm, "visible", value=False):
-                with ui.row().classes("items-center"):
-                    el.SmButton(text="Remove", on_click=self._remove_history)
-                with ui.row().classes("items-center"):
-                    el.SmButton(text="Refresh", on_click=lambda _: self.update())
+            with ui.row() as row:
+                row.classes("justify-between w-full").bind_visibility_from(self._confirm, "visible", value=False)
+                el.SmButton(text="Remove", on_click=self._remove_history)
+                el.SmButton(text="Refresh", on_click=lambda _: self.update())
             self.grid = ui.aggrid(
                 {
                     "rowSelection": {
@@ -198,8 +197,9 @@ class Answer(Tab):
                 },
                 theme="balham",
             )
-            self.grid.tailwind().width("full").height("5/6")
+            self.grid.classes("w-full h-5/6")
             self.grid.on("cellClicked", lambda e: display_request(e))
+            self.update()
             register_history(self)
 
     def _set_selection(self, mode=None):
@@ -286,21 +286,20 @@ class Playbook(Tab):
                                         el.DButton("Kill Playbook", on_click=lambda: cli_instance.terminate()).bind_visibility_from(cli_instance, "is_busy", value=True)
                                         ui.spinner(type="dots", size="32px").bind_visibility_from(cli_instance, "is_busy", value=True)
                         with el.WRow() as row:
-                            row.tailwind.height("[40px]")
+                            row.classes("h-[40px]")
                             el.DButton("Exit", on_click=lambda: dialog.submit("exit"))
                 await dialog
                 if cli_instance is not None:
                     cli_instance.release_terminal(terminal)
 
         with el.WColumn() as col:
-            col.tailwind.height("full")
+            col.classes("h-full")
             self._confirm = el.WRow()
             self._confirm.visible = False
-            with el.WRow().classes("justify-between").bind_visibility_from(self._confirm, "visible", value=False):
-                with ui.row().classes("items-center"):
-                    el.SmButton(text="Remove", on_click=self._remove_history)
-                with ui.row().classes("items-center"):
-                    el.SmButton(text="Refresh", on_click=lambda _: self.update())
+            with ui.row() as row:
+                row.classes("justify-between w-full").bind_visibility_from(self._confirm, "visible", value=False)
+                el.SmButton(text="Remove", on_click=self._remove_history)
+                el.SmButton(text="Refresh", on_click=lambda _: self.update())
             self.grid = ui.aggrid(
                 {
                     "rowSelection": {
@@ -351,8 +350,9 @@ class Playbook(Tab):
                 },
                 theme="balham",
             )
-            self.grid.tailwind().width("full").height("5/6")
+            self.grid.classes("w-full h-5/6")
             self.grid.on("cellClicked", lambda e: display_request(e))
+            self.update()
             register_history(self)
 
     def _set_selection(self, mode=None):

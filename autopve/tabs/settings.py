@@ -18,15 +18,15 @@ class Setting(Tab):
 
     def keys_controls(self):
         with ui.column() as col:
-            col.tailwind.width("[560px]").align_items("center")
+            col.classes("w-[560px] items-center")
             with ui.card() as card:
-                card.tailwind.width("full")
+                card.classes("w-full")
                 key_select = ui.select(list(self.keys.keys()), label="key", new_value_mode="add", with_input=True)
-                key_select.tailwind.width("full")
+                key_select.classes("w-full")
                 with ui.row() as row:
-                    row.tailwind.width("full").align_items("center").justify_content("between")
-                    with ui.row() as row:
-                        row.tailwind.align_items("center")
+                    row.classes("w-full items-center justify-between")
+                    with ui.row() as inner_row:
+                        inner_row.classes("items-center")
                         self.help = None
                         key = el.FInput(label="key", on_change=lambda e: self.key_changed(e.value), read_only=True)
                         key.bind_value_from(key_select)
@@ -35,7 +35,7 @@ class Setting(Tab):
                     ui.button(icon="add", on_click=lambda key=key: self.add_key(key.value)).tooltip("Add Key")
             ui.separator()
             self._scroll = ui.scroll_area()
-            self._scroll.tailwind.width("full").height("[480px]")
+            self._scroll.classes("w-full h-[480px]")
         items = storage.answer(self.answer)
         if self.type is not None and self.type in items:
             for key, value in items[self.type].items():
@@ -48,9 +48,9 @@ class Setting(Tab):
         if self.key_valid(key) is True:
             with self._scroll:
                 with ui.row() as key_row:
-                    key_row.tailwind.width("full").align_items("center").justify_content("between")
+                    key_row.classes("w-full items-center justify-between")
                     with ui.row() as row:
-                        row.tailwind.align_items("center")
+                        row.classes("items-center")
                         if key in self.keys and "options" in self.keys[key]:
                             options = self.keys[key]["options"]
                             if value != "" and value not in self.keys[key]["options"]:
@@ -90,7 +90,7 @@ class Setting(Tab):
                                         editor = ui.codemirror(control.value, language="JSON", theme="vscodeDark", on_change=lambda e: self.set_key(control.label, e.value))
                                         editor.classes("w-full h-full")
                                     with el.WRow() as row:
-                                        row.tailwind.height("[40px]")
+                                        row.classes("h-[40px]")
                                         el.DButton("Exit", on_click=lambda: dialog.submit("exit"))
                             await dialog
                             if isinstance(control, el.FSelect):
@@ -316,20 +316,20 @@ class NetworkInterfacePinning(Setting):
                     del storage.answer(self.answer)["network.interface-name-pinning"]
 
         with ui.column() as col:
-            col.tailwind.width("[560px]").align_items("center")
+            col.classes("w-[560px] items-center")
             with ui.card() as card:
-                card.tailwind.width("full")
+                card.classes("w-full")
                 ui.checkbox(text="Enable", value="network.interface-name-pinning" in storage.answer(self.answer), on_change=lambda e: control_pinning(e.value))
                 with ui.row() as row:
-                    row.tailwind.width("full").align_items("center").justify_content("between")
+                    row.classes("w-full items-center justify-between")
                     with ui.row() as row:
-                        row.tailwind.align_items("center")
+                        row.classes("items-center")
                         self.help = None
                         key = el.FInput(label="MAC", on_change=lambda e: self.key_changed(e.value))
                     ui.button(icon="add", on_click=lambda key=key: self.add_key(key.value)).tooltip("Add MAC")
             ui.separator()
             self._scroll = ui.scroll_area()
-            self._scroll.tailwind.width("full").height("[480px]")
+            self._scroll.classes("w-full h-[480px]")
         items = storage.answer(self.answer)
         if self.type is not None and self.type in items:
             for key, value in items[self.type].items():

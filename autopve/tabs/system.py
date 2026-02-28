@@ -22,22 +22,23 @@ class System(Tab):
     def restriction_picker(self):
         def restriction_controls():
             with ui.column() as col:
-                col.tailwind.width("[560px]").align_items("center")
+                col.classes("w-[560px] items-center")
                 with ui.card() as card:
-                    card.tailwind.width("full")
+                    card.classes("w-full")
                     self.select = ui.select(self._share.unique_system_information, new_value_mode="add", with_input=True)
-                    self.select.tailwind.width("full")
+                    self.select.classes("w-full")
                     card.on("mousemove", handler=self.update, throttle=3)
                     with ui.row() as row:
-                        row.tailwind.width("full").align_items("center").justify_content("between")
+                        row.classes("w-full items-center justify-between")
                         restriction = el.FInput(read_only=True)
-                        restriction.tailwind.width("[420px]")
+                        restriction.classes("w-[420px]")
                         restriction.bind_value_from(self.select)
                         ui.button(icon="add", on_click=lambda restriction=restriction: add_restriction(restriction.value))
-                    ui.label(self.note).tailwind.align_self("center")
+                    ui.label(self.note).classes("self-center")
+
                 ui.separator()
                 self.scroll = ui.scroll_area()
-                self.scroll.tailwind.width("full").height("[480px]")
+                self.scroll.classes("w-full h-[480px]")
             restrictions = []
             if self.type in storage.answer(self.answer):
                 restrictions = storage.answer(self.answer)[self.type]
@@ -48,12 +49,12 @@ class System(Tab):
             if restriction is not None and restriction.strip() != "" and restriction not in self._elements.keys():
                 with self.scroll:
                     with ui.row() as row:
-                        row.tailwind.width("full").align_items("center").justify_content("between")
+                        row.classes("w-full items-center justify-between")
                         self._elements[restriction] = {
                             "control": el.FInput(value=restriction, read_only=True),
                             "row": row,
                         }
-                        self._elements[restriction]["control"].tailwind.width("[420px]")
+                        self._elements[restriction]["control"].classes("w-[420px]")
                         ui.button(icon="remove", on_click=lambda _, r=restriction: remove_restriction(r))
                 if self.type not in storage.answer(self.answer):
                     storage.answer(self.answer)[self.type] = []
@@ -87,7 +88,7 @@ class MustNotContain(System):
 class SSHKey:
     async def build(self):
         with ui.column() as col:
-            col.tailwind.width("[560px]").align_items("center").height("full")
+            col.classes("w-[560px] items-center h-full")
             ui.label("SSH Public Key").classes("text-secondary text-h4")
             with ui.scroll_area() as s:
                 s.classes("w-full h-full")

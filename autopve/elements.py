@@ -1,12 +1,10 @@
 from typing import Any, Callable, Dict, List, Literal, Optional, Union
 import base64
 import asyncio
-from nicegui import ui, app, Tailwind
+from nicegui import ui, app
 from nicegui.elements.notification import NotificationPosition, NotificationType  # type: ignore
 from nicegui.elements.spinner import SpinnerTypes  # type: ignore
 from nicegui.elements.tabs import Tab  # type: ignore
-from nicegui.tailwind_types.height import Height  # type: ignore
-from nicegui.tailwind_types.width import Width  # type: ignore
 from nicegui.elements.mixins.validation_element import ValidationElement  # type: ignore
 from nicegui.events import GenericEventArguments, handle_event  # type: ignore
 import logging
@@ -110,26 +108,26 @@ class ErrorAggregator:
 class WColumn(ui.column):
     def __init__(self) -> None:
         super().__init__()
-        self.tailwind.width("full").align_items("center")
+        self.classes("w-full items-center")
 
 
 class DBody(ui.column):
-    def __init__(self, height: Height = "[480px]", width: Width = "[240px]") -> None:
+    def __init__(self, height: str = "[480px]", width: str = "[240px]") -> None:
         super().__init__()
-        self.tailwind.align_items("center").justify_content("between")
-        self.tailwind.height(height).width(width)
+        self.classes("items-center justify-between")
+        self.classes(f"h-{height} w-{width}")
 
 
 class WRow(ui.row):
     def __init__(self) -> None:
         super().__init__()
-        self.tailwind.width("full").align_items("center").justify_content("center")
+        self.classes("w-full items-center justify-center")
 
 
 class Card(ui.card):
     def __init__(self) -> None:
         super().__init__()
-        self.tailwind.border_color(f"[{orange}]")
+        self.classes(f"border-[{orange}]")
 
 
 class DInput(ui.input):
@@ -155,7 +153,7 @@ class DInput(ui.input):
             autocomplete=autocomplete,
             validation={"": validation},
         )
-        self.tailwind.width("full")
+        self.classes("w-full")
         if value == " ":
             self.value = ""
 
@@ -201,7 +199,7 @@ class VInput(ui.input):
             autocomplete=autocomplete,
             validation={"": lambda value: checks(value)},
         )
-        self.tailwind.width("full")
+        self.classes("w-full")
         if value == " ":
             self.value = ""
 
@@ -230,7 +228,7 @@ class FInput(ui.input):
             autocomplete=autocomplete,
             validation={} if read_only else {"": validation},
         )
-        self.tailwind.width("[320px]")
+        self.classes("w-[320px]")
         if value == " ":
             self.value = ""
         if read_only:
@@ -260,7 +258,7 @@ class DSelect(ui.select):
             multiple=multiple,
             clearable=clearable,
         )
-        self.tailwind.width("full")
+        self.classes("w-full")
         if multiple is True:
             self.props("use-chips")
 
@@ -288,7 +286,7 @@ class Select(ui.select):
             multiple=multiple,
             clearable=clearable,
         )
-        self.tailwind.width("1/2")
+        self.classes("w-1/2")
 
 
 class DButton(ui.button):
@@ -302,13 +300,13 @@ class DButton(ui.button):
     ) -> None:
         super().__init__(text, on_click=on_click, color=color, icon=icon)
         self.props("size=md")
-        self.tailwind.padding("px-2.5").padding("py-1")
+        self.classes("px-2.5 py-1")
 
 
 class DCheckbox(ui.checkbox):
     def __init__(self, text: str = "", *, value: bool = False, on_change: Callable[..., Any] | None = None) -> None:
         super().__init__(text, value=value, on_change=on_change)
-        self.tailwind.text_color("secondary")
+        self.classes("text-secondary")
 
 
 class IButton(ui.button):
@@ -335,7 +333,7 @@ class SmButton(ui.button):
     ) -> None:
         super().__init__(text, on_click=on_click, color=color, icon=icon)
         self.props("size=sm")
-        self.tailwind.width("16")
+        self.classes("w-16")
 
 
 class LgButton(ui.button):
@@ -393,7 +391,7 @@ class FSelect(ui.select):
         clearable: bool = False,
     ) -> None:
         super().__init__(options, label=label, value=value, on_change=on_change, with_input=with_input, new_value_mode=new_value_mode, multiple=multiple, clearable=clearable)
-        self.tailwind.width("[320px]")
+        self.classes("w-[320px]")
 
 
 class JsonEditor(ui.json_editor):

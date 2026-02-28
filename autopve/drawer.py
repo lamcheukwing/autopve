@@ -67,7 +67,7 @@ class Drawer(object):
                     .props("dense flat bordered binary-state-sort hide-header hide-selected-banner hide-pagination virtual-scroll")
                     .style("height: 116px")
                 )
-                self._answers_table.tailwind.width("full")
+                self._answers_table.classes("w-full")
                 self._answers_table.visible = False
                 for name in storage.answers.keys():
                     self._add_answer_to_table(name)
@@ -100,7 +100,7 @@ class Drawer(object):
                     .props("dense flat bordered binary-state-sort hide-header hide-selected-banner hide-pagination virtual-scroll")
                     .style("height: 116px")
                 )
-                self._playbooks_table.tailwind.width("full")
+                self._playbooks_table.classes("w-full")
                 self._playbooks_table.visible = False
                 for name in storage.playbooks():
                     self._add_playbook_to_table(name)
@@ -140,14 +140,14 @@ class Drawer(object):
                     .props("dense flat bordered binary-state-sort hide-header hide-selected-banner hide-pagination virtual-scroll")
                     .style("height: 116px")
                 )
-                self._files_table.tailwind.width("full")
+                self._files_table.classes("w-full")
                 self._files_table.visible = False
                 for name in storage.files():
                     self._add_file_to_table(name)
             chevron = ui.button(icon="chevron_left", color=None, on_click=toggle_drawer).props("padding=0px")
             chevron.classes("absolute")
             chevron.style("top: 16vh").style("right: -12px").style("background-color: #0E1210 !important").style("height: 16vh")
-            chevron.tailwind.border_color("[#E97451]")
+            chevron.classes("border-[#E97451]")
             chevron.props(f"color=primary text-color=accent")
 
     def _add_answer_to_table(self, name):
