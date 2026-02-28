@@ -68,9 +68,7 @@ class Content:
                     self._tab_panels.classes("w-full h-full")
 
     async def _tab_changed_answer(self, e):
-        if e.value == "History":
-            self._history.update()
-        elif e.value == "Must Contain":
+        if e.value == "Must Contain":
             self._must_contain.update()
         elif e.value == "Must Not Contain":
             self._must_not_contain.update()
@@ -136,8 +134,7 @@ class Content:
                     self._tab_panels.classes("w-full h-full")
 
     async def _tab_changed_playbook(self, e):
-        if e.value == "History":
-            self._history.update()
+        pass
 
     def _build_tab_panels_playbook(self):
         self._tab_panels.clear()
